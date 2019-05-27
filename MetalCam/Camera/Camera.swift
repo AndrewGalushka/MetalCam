@@ -18,7 +18,7 @@ class Camera: CameraType {
     
     // Current Camera Device
     private var currentCamDevice: AVCaptureDevice!
-    private var position: CameraPosition = .front
+    private var position: CameraPosition = .back
     
     // Device Inputs
     private var deviceInput: AVCaptureDeviceInput!
@@ -53,6 +53,7 @@ class Camera: CameraType {
         
         // Save internal state
         self.currentCamDevice = self.backDevice
+        self.position = .back
     }
     
     func attach(to preview: AVCaptureVideoPreviewLayer) {
@@ -73,15 +74,19 @@ class Camera: CameraType {
         // Find current Device
         switch self.position {
         case .front:
-            device = frontDevice
-        case .back:
             device = backDevice
+        case .back:
+            device = frontDevice
         }
         
         // Return if switching device is the same as current
         guard !device.isEqual(self.currentCamDevice) else {
             return
         }
+        
+        // Save switching to device
+        self.currentCamDevice = device
+        self.position.toggle()
         
         // Remove old device input from CamptureSesion
         self.captureSession.removeInput(self.deviceInput)
@@ -91,9 +96,6 @@ class Camera: CameraType {
         
         // Add created device input to CaptureSession
         self.captureSession.addInput(self.deviceInput)
-        
-        // Save new camera position
-        self.position.toggle()
     }
     
     private func discoverBackDevice() -> AVCaptureDevice {

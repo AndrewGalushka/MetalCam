@@ -20,7 +20,25 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g1E-bp-xMp" customClass="CaptureViewPreviewView" customModule="MetalCam" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vKU-iQ-HWp">
+                                        <rect key="frame" x="365" y="769" width="44" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="44" id="dlL-y8-jF1"/>
+                                            <constraint firstAttribute="height" constant="44" id="t0E-f5-4jb"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="26"/>
+                                        <state key="normal" title="R"/>
+                                        <connections>
+                                            <action selector="switchCameraButtonTouchUpInsideActionHandler:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FdR-QI-icu"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="vKU-iQ-HWp" secondAttribute="trailing" constant="5" id="Rzj-Yj-dXf"/>
+                                    <constraint firstAttribute="bottom" secondItem="vKU-iQ-HWp" secondAttribute="bottom" constant="5" id="qbI-WP-BNd"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

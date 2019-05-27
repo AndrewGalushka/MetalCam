@@ -28,5 +28,10 @@ class CameraViewController: UIViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }
+    
+    
+    @IBAction func switchCameraButtonTouchUpInsideActionHandler(_ sender: Any) {
+        self.camera.switchCamPosition()
+    }
 }
 
