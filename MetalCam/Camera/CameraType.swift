@@ -14,4 +14,5 @@ protocol CameraType {
     func attach(to preview: AVCaptureVideoPreviewLayer)
     func start()
     func stop()
+    func switchCamPosition()
 }

@@ -10,14 +10,23 @@ import Foundation
 import AVFoundation
 
 class Camera: CameraType {
+
+    // Devices
     private var frontDevice: AVCaptureDevice!
     private var backDevice: AVCaptureDevice!
     private var micDevice: AVCaptureDevice!
     
+    // Current Camera Device
+    private var currentCamDevice: AVCaptureDevice!
+    private var position: CameraPosition = .front
+    
+    // Device Inputs
     private var deviceInput: AVCaptureDeviceInput!
     
+    // CaptureSession
     private var captureSession: AVCaptureSession!
     
+    // Outputs
     private var captureSessionOutput: AVCaptureOutput!
     
     func configure() {
@@ -41,6 +50,9 @@ class Camera: CameraType {
         
         // Add output to CaptureSession
         captureSession.addOutput(captureSessionOutput)
+        
+        // Save internal state
+        self.currentCamDevice = self.backDevice
     }
     
     func attach(to preview: AVCaptureVideoPreviewLayer) {
@@ -53,6 +65,35 @@ class Camera: CameraType {
     
     func stop() {
         captureSession.stopRunning()
+    }
+    
+    func switchCamPosition() {
+        let device: AVCaptureDevice
+        
+        // Find current Device
+        switch self.position {
+        case .front:
+            device = frontDevice
+        case .back:
+            device = backDevice
+        }
+        
+        // Return if switching device is the same as current
+        guard !device.isEqual(self.currentCamDevice) else {
+            return
+        }
+        
+        // Remove old device input from CamptureSesion
+        self.captureSession.removeInput(self.deviceInput)
+        
+        // Create new device input with new device
+        self.deviceInput = try! AVCaptureDeviceInput(device: self.currentCamDevice)
+        
+        // Add created device input to CaptureSession
+        self.captureSession.addInput(self.deviceInput)
+        
+        // Save new camera position
+        self.position.toggle()
     }
     
     private func discoverBackDevice() -> AVCaptureDevice {
@@ -80,3 +121,19 @@ class Camera: CameraType {
     }
 }
 
+extension Camera {
+    
+    enum CameraPosition {
+        case front
+        case back
+        
+        mutating func toggle() {
+            switch self {
+            case .front:
+                self = .back
+            case .back:
+                self = .front
+            }
+        }
+    }
+}
