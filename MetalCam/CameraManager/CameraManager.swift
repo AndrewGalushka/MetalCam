@@ -9,7 +9,6 @@
 import Foundation
 import AVFoundation
 import CoreImage
-import UIKit
 
 class CameraManager: NSObject {
     private let camera: CameraType = Camera()
@@ -50,8 +49,12 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
         let rotationTransform = CGAffineTransform.identity.rotated(by: CGFloat(-90 * Float.pi/180))
         let ciImage = CIImage(cvImageBuffer: imageBuffer).transformed(by: rotationTransform)
         
+        let outputImage = CIFilter(name: "CICrystallize", parameters: ["inputImage": ciImage])?.outputImage
+        
         let context = CIContext(options: nil)
-        let cgImage = context.createCGImage(ciImage, from: ciImage.extent)
+        let cgImage = context.createCGImage(outputImage!, from: ciImage.extent)
+        
+        
         
         DispatchQueue.main.async {
             self.preview?.contents = cgImage
