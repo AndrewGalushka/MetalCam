@@ -29,7 +29,6 @@ class CameraViewController: UIViewController {
         return true
     }
     
-    
     @IBAction func switchCameraButtonTouchUpInsideActionHandler(_ sender: Any) {
         self.camera.switchCamPosition()
     }
