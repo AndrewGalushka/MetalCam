@@ -15,4 +15,6 @@ protocol CameraType {
     func start()
     func stop()
     func switchCamPosition()
+    
+    func setSampleBufferDelegate(_ sampleBufferDelegate: AVCaptureVideoDataOutputSampleBufferDelegate?, queue sampleBufferCallbackQueue: DispatchQueue?)
 }

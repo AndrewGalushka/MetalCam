@@ -10,7 +10,7 @@ import Foundation
 import AVFoundation
 
 class Camera: CameraType {
-
+    
     // Devices
     private var frontDevice: AVCaptureDevice!
     private var backDevice: AVCaptureDevice!
@@ -27,8 +27,8 @@ class Camera: CameraType {
     private var captureSession: AVCaptureSession!
     
     // Outputs
-    private var captureSessionOutput: AVCaptureOutput!
-    
+    private var captureSessionOutput: AVCaptureVideoDataOutput!
+        
     func configure() {
         
         // Discover for devices and initialize properties
@@ -50,7 +50,7 @@ class Camera: CameraType {
         
         // Add output to CaptureSession
         captureSession.addOutput(captureSessionOutput)
-        
+    
         // Save internal state
         self.currentCamDevice = self.backDevice
         self.position = .back
@@ -96,6 +96,10 @@ class Camera: CameraType {
         
         // Add created device input to CaptureSession
         self.captureSession.addInput(self.deviceInput)
+    }
+    
+    func setSampleBufferDelegate(_ sampleBufferDelegate: AVCaptureVideoDataOutputSampleBufferDelegate?, queue sampleBufferCallbackQueue: DispatchQueue?) {
+        captureSessionOutput.setSampleBufferDelegate(sampleBufferDelegate, queue: sampleBufferCallbackQueue)
     }
     
     private func discoverBackDevice() -> AVCaptureDevice {
