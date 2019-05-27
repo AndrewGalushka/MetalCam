@@ -8,16 +8,22 @@
 
 import Foundation
 import AVFoundation
+import CoreImage
+import UIKit
 
 class CameraManager: NSObject {
     private let camera: CameraType = Camera()
+    private let processingQueue: DispatchQueue = DispatchQueue(label: "com.camera.manager.processing.queue")
+    
+    private var preview: CALayer?
     
     func configure() {
         camera.configure()
+        camera.setSampleBufferDelegate(self, queue: processingQueue)
     }
     
     func attach(to preview: AVCaptureVideoPreviewLayer) {
-        camera.attach(to: preview)
+        self.preview = preview
     }
     
     func start() {
@@ -30,5 +36,29 @@ class CameraManager: NSObject {
     
     func switchCamPosition() {
         camera.switchCamPosition()
+    }
+}
+
+extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
+    
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        
+        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            return
+        }
+        
+        let rotationTransform = CGAffineTransform.identity.rotated(by: CGFloat(-90 * Float.pi/180))
+        let ciImage = CIImage(cvImageBuffer: imageBuffer).transformed(by: rotationTransform)
+        
+        let context = CIContext(options: nil)
+        let cgImage = context.createCGImage(ciImage, from: ciImage.extent)
+        
+        DispatchQueue.main.async {
+            self.preview?.contents = cgImage
+        }
+    }
+    
+    func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        
     }
 }
