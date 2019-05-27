@@ -12,7 +12,7 @@ class CameraViewController: UIViewController {
 
     // MARK: - Properties(Private)
     
-    private let camera: CameraType = Camera()
+    private let camera: CameraManager = CameraManager()
     @IBOutlet weak var videoCapturePreview: CaptureViewPreviewView!
     
     // MARK: - Lifecycle
