@@ -37,7 +37,7 @@ class Camera: CameraType {
         self.micDevice = self.discoverMicDevice()
         
         // Add Input to Discovered device (back camera)
-        self.deviceInput = try! AVCaptureDeviceInput(device: backDevice)
+        self.deviceInput = try! AVCaptureDeviceInput(device: frontDevice)
         
         // Initialize AVCaptureSession
         self.captureSession = AVCaptureSession()
@@ -50,10 +50,17 @@ class Camera: CameraType {
         
         // Add output to CaptureSession
         captureSession.addOutput(captureSessionOutput)
-    
+        
+        captureSessionOutput.connection(with: .video)?.isEnabled = true
+        if let connection = captureSessionOutput.connection(with: .video) {
+            if connection.isCameraIntrinsicMatrixDeliverySupported {
+                connection.isCameraIntrinsicMatrixDeliveryEnabled = true
+            }
+        }
+        
         // Save internal state
-        self.currentCamDevice = self.backDevice
-        self.position = .back
+        self.currentCamDevice = self.frontDevice
+        self.position = .front
     }
     
     func attach(to preview: AVCaptureVideoPreviewLayer) {
@@ -88,7 +95,7 @@ class Camera: CameraType {
         self.currentCamDevice = device
         self.position.toggle()
         
-        // Remove old device input from CamptureSesion
+        // Remove old device input from Capture Session
         self.captureSession.removeInput(self.deviceInput)
         
         // Create new device input with new device

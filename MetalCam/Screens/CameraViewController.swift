@@ -21,7 +21,7 @@ class CameraViewController: UIViewController {
         super.viewDidLoad()
     
         camera.configure()
-        camera.attach(to: videoCapturePreview.videoPreviewLayer)
+        camera.attachOutput(to: videoCapturePreview)
         camera.start()
     }
     
