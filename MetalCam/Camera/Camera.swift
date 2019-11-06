@@ -47,6 +47,7 @@ class Camera: CameraType {
         
         // Initialize CaptureOutput
         self.captureSessionOutput = AVCaptureVideoDataOutput()
+        self.captureSessionOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
         
         // Add output to CaptureSession
         captureSession.addOutput(captureSessionOutput)
