@@ -373,4 +373,19 @@ class PreviewMetalView: MTKView {
         commandBuffer.present(drawable) // Draw to the screen
         commandBuffer.commit()
     }
+    
+    func texture(from cvPixelBuffer: CVPixelBuffer) -> MTLTexture {
+        let bytesPerRow = CVPixelBufferGetBytesPerRow(cvPixelBuffer)
+        let size = (width: CVPixelBufferGetWidth(cvPixelBuffer),
+                          height: CVPixelBufferGetHeight(cvPixelBuffer))
+        
+        let textureDescriptor = MTLTextureDescriptor()
+        textureDescriptor.pixelFormat = .bgra8Unorm
+        textureDescriptor.width = size.width
+        textureDescriptor.height = size.height
+        
+        let texture = device!.makeTexture(descriptor: textureDescriptor)
+        
+        return texture!
+    }
 }

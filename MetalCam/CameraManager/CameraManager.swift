@@ -10,14 +10,23 @@ import Foundation
 import AVFoundation
 import CoreImage
 import UIKit
+import CoreVideo
 
 class CameraManager: NSObject {
     private let camera: CameraType = Camera()
     private let visionFaceRecognizer = VisionFaceRecognizer()
     private let processingQueue: DispatchQueue = DispatchQueue(label: "com.camera.manager.processing.queue")
+    private let faceProcessingQueue: DispatchQueue = DispatchQueue(label: "com.camera.manager.face.processing.queue")
+    private let pixelBufferCopyPool = PixelBufferCopyPool()
     
     private var preview: AVCaptureVideoPreviewLayer?
-    private let previewView: PreviewMetalView = PreviewMetalView()
+    private let previewView: PreviewMetalView = {
+        let previewView = PreviewMetalView()
+        previewView.rotation = .rotate180Degrees
+        previewView.mirroring = true
+        return previewView
+    }()
+    
     private let fpsMeasurer = ManualFPSMeasurer()
     
     func configure() {
@@ -35,10 +44,6 @@ class CameraManager: NSObject {
         previewView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         previewView.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
     }
-//    func attach(to preview: AVCaptureVideoPreviewLayer) {
-//        self.preview = preview
-//        self.camera.attach(to: preview)
-//    }
     
     func start() {
         camera.start()
@@ -55,23 +60,39 @@ class CameraManager: NSObject {
 
 extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
     
+    static var sigma = 0
+    
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         fpsMeasurer.measureSubInterval()
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return
         }
+    
         
-        previewView.pixelBuffer = imageBuffer
-        
-        DispatchQueue.global().async {
-            self.visionFaceRecognizer.recognizeFace(pixelBuffer: imageBuffer, orientation: self.exifOrientationForCurrentDeviceOrientation())
+        if CameraManager.sigma % 5 == 0 {
+            
+            faceProcessingQueue.async {
+                guard let pixelBufferCopy = self.pixelBufferCopyPool.makeCopy(imageBuffer) else {
+                    return
+                }
+                
+                self.visionFaceRecognizer.recognizeFace(pixelBuffer: pixelBufferCopy,
+                                                        orientation: ExifOrientationConvertor.exifOrientationForCurrentDeviceOrientation())
+            }
         }
-        
-//        let rotationTransform = CGAffineTransform.identity.rotated(by: CGFloat(-90 * Float.pi/180))
-//        let ciImage = CIImage(cvImageBuffer: imageBuffer) //.transformed(by: rotationTransform)
 //
-//        let context = CIContext(options: nil)
-//        let cgImage = context.createCGImage(ciImage, from: ciImage.extent)
+//            if let sampleBufferCopy = sampleBufferCopy,
+//                let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBufferCopy) {
+//
+//                DispatchQueue.global().async {
+//                    self.visionFaceRecognizer.recognizeFace(pixelBuffer: pixelBuffer,
+//                                                            orientation: self.exifOrientationForCurrentDeviceOrientation())
+//                }
+//            }
+//        }
+        
+        self.previewView.pixelBuffer = imageBuffer
+        CameraManager.sigma += 1
     }
     
     func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
@@ -88,26 +109,5 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
         let assetWriterInputAdaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: assetWriterInput, sourcePixelBufferAttributes: nil)
         let assetWriter = try! AVAssetWriter(outputURL: path, fileType: .mov)
         assetWriter.add(assetWriterInput)
-    }
-    
-    func exifOrientationForDeviceOrientation(_ deviceOrientation: UIDeviceOrientation) -> CGImagePropertyOrientation {
-        
-        switch deviceOrientation {
-        case .portraitUpsideDown:
-            return .rightMirrored
-            
-        case .landscapeLeft:
-            return .downMirrored
-            
-        case .landscapeRight:
-            return .upMirrored
-            
-        default:
-            return .leftMirrored
-        }
-    }
-    
-    func exifOrientationForCurrentDeviceOrientation() -> CGImagePropertyOrientation {
-        return exifOrientationForDeviceOrientation(UIDevice.current.orientation)
     }
 }
