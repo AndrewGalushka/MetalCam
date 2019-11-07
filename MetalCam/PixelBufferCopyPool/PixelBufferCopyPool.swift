@@ -21,7 +21,7 @@ class PixelBufferCopyPool {
         
         guard
             let pool = self.pool,
-            let pixelBufferCopy = makePixelBuffer(using: pool, description: bufferDescription)
+            let pixelBufferCopy = createPixelBuffer(using: pool, description: bufferDescription)
         else {
             return nil
         }
@@ -54,13 +54,13 @@ class PixelBufferCopyPool {
             assert(false, "Failed to create a pool")
             
             if self.pool != nil {
-                //                CVPixelBufferPoolFlush(pool, .excessBuffers)
+//                CVPixelBufferPoolFlush(pool, .excessBuffers)
                 self.pool = nil
             }
         }
     }
     
-    private func makePixelBuffer(using pool: CVPixelBufferPool, description: PixelBufferDescription) -> CVPixelBuffer? {
+    private func createPixelBuffer(using pool: CVPixelBufferPool, description: PixelBufferDescription) -> CVPixelBuffer? {
         var pixelBuffer: CVPixelBuffer?
         let status = CVPixelBufferCreate(kCFAllocatorDefault,
                                          description.width,
@@ -75,11 +75,8 @@ class PixelBufferCopyPool {
     }
     
     private func copyBytes(from pixelBuffer: CVPixelBuffer, to pixelBufferCopy: CVPixelBuffer, bufferDescription: PixelBufferDescription) {
-        if bufferDescription.planes == 1 { //BGR
-            let baseAddressCopy = CVPixelBufferGetBaseAddress(pixelBufferCopy)
-            let baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer)
-            memcpy(baseAddressCopy, baseAddress, bufferDescription.height * bufferDescription.bytesPerRow)
-        } else if bufferDescription.planes == 2 { // YUV
+        
+        if bufferDescription.planes == 2 { // YUV
             let yDestPlane = CVPixelBufferGetBaseAddressOfPlane(pixelBufferCopy, 0)
             let yPlane = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0)
             memcpy(yDestPlane, yPlane, bufferDescription.width * bufferDescription.height)
@@ -87,6 +84,10 @@ class PixelBufferCopyPool {
             let uvDestPlane = CVPixelBufferGetBaseAddressOfPlane(pixelBufferCopy, 1)
             let uvPlane = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1)
             memcpy(uvDestPlane, uvPlane, bufferDescription.width * bufferDescription.height / 2)
+        } else {
+            let baseAddressCopy = CVPixelBufferGetBaseAddress(pixelBufferCopy)
+            let baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer)
+            memcpy(baseAddressCopy, baseAddress, bufferDescription.height * bufferDescription.bytesPerRow)
         }
     }
 }
