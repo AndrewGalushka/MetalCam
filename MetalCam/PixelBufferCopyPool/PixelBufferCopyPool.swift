@@ -66,7 +66,7 @@ class PixelBufferCopyPool {
                                          description.width,
                                          description.height,
                                          description.pixelFormat,
-                                         nil,
+                                         [kCVPixelBufferMetalCompatibilityKey: true] as CFDictionary,
                                          &pixelBuffer)
         
         assert(status == kCVReturnSuccess, "Failed to create pixel buffer from pool")
@@ -89,6 +89,7 @@ class PixelBufferCopyPool {
             let baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer)
             memcpy(baseAddressCopy, baseAddress, bufferDescription.height * bufferDescription.bytesPerRow)
         }
+        
     }
 }
 
@@ -99,6 +100,7 @@ extension PixelBufferCopyPool {
         let pixelFormat: OSType
         let bytesPerRow: Int
         let planes: Int
+        
         
         init(pixelBuffer: CVPixelBuffer) {
             self.width = CVPixelBufferGetWidth(pixelBuffer)
