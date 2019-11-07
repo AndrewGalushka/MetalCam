@@ -45,21 +45,38 @@ import CoreMedia
     }
     
     @objc func recognizeFace(pixelBuffer: CVPixelBuffer, orientation: CGImagePropertyOrientation) {
-        
-        var requestHandlerOptions: [VNImageOption: AnyObject] = [:]
-        
-        if let cameraIntrinsicData = CMGetAttachment(pixelBuffer, key: kCMSampleBufferAttachmentKey_CameraIntrinsicMatrix, attachmentModeOut: nil) {
-            requestHandlerOptions[VNImageOption.cameraIntrinsics] = cameraIntrinsicData
+        let requestHandlerOptions = makeRequestSettingsOptions(pixelBuffer)
+
+        switch self.hasDetectedRectangles() {
+        case .none:
+            self.performObjectDetection(on: pixelBuffer,
+                                        orientation: orientation,
+                                        options: requestHandlerOptions)
+        case .some(let trackingRequests):
+            self.performSequentialDetectionWithTrackingRequests(trackingRequests,
+                                                                pixelBuffer: pixelBuffer,
+                                                                orientation: orientation,
+                                                                options: requestHandlerOptions)
         }
-        
-        guard
-            let trackingRequests = self.trackingRequests,
-            !trackingRequests.isEmpty
-        else {
-            self.detectObjectsToTrack(pixelBuffer: pixelBuffer, orientation: orientation, options: requestHandlerOptions)
+    }
+    
+    private func performObjectDetection(on pixelBuffer: CVPixelBuffer, orientation: CGImagePropertyOrientation, options:  [VNImageOption : Any]) {
+        guard let objectDetectionRequests = self.objectDetectionRequests else {
             return
         }
         
+        let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer,
+                                                        orientation: orientation,
+                                                        options: options)
+        
+        do {
+            try imageRequestHandler.perform(objectDetectionRequests)
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    private func performSequentialDetectionWithTrackingRequests(_ trackingRequests: [VNTrackObjectRequest], pixelBuffer: CVPixelBuffer, orientation: CGImagePropertyOrientation, options: [VNImageOption : Any]) {
         guard let sequenceRequestHandler = self.sequenceRequestHandler else {
             return
         }
@@ -99,20 +116,22 @@ import CoreMedia
             return
         }
     }
-        
-    private func detectObjectsToTrack(pixelBuffer: CVPixelBuffer, orientation: CGImagePropertyOrientation, options:  [VNImageOption : Any]) {
-        guard let objectDetectionRequests = self.objectDetectionRequests else {
-            return
+    
+    private func hasDetectedRectangles() -> [VNTrackObjectRequest]? {
+        guard let trackingRequests = trackingRequests, !trackingRequests.isEmpty else {
+            return nil
         }
         
-        let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer,
-                                                        orientation: orientation,
-                                                        options: options)
+        return trackingRequests
+    }
+    
+    private func makeRequestSettingsOptions(_ pixelBuffer: CVPixelBuffer) -> [VNImageOption : AnyObject] {
+        var requestHandlerOptions: [VNImageOption: AnyObject] = [:]
         
-        do {
-            try imageRequestHandler.perform(objectDetectionRequests)
-        } catch let error {
-            print(error)
+        if let cameraIntrinsicData = CMGetAttachment(pixelBuffer, key: kCMSampleBufferAttachmentKey_CameraIntrinsicMatrix, attachmentModeOut: nil) {
+            requestHandlerOptions[VNImageOption.cameraIntrinsics] = cameraIntrinsicData
         }
+        
+        return requestHandlerOptions
     }
 }
