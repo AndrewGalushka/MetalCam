@@ -68,29 +68,16 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
             return
         }
     
-        
-        if CameraManager.sigma % 5 == 0 {
+        if CameraManager.sigma % 2 == 0 {
             
-            faceProcessingQueue.async {
-                guard let pixelBufferCopy = self.pixelBufferCopyPool.makeCopy(imageBuffer) else {
-                    return
+            if let pixelBufferCopy = self.pixelBufferCopyPool.makeCopy(imageBuffer){
+                faceProcessingQueue.async {
+                    self.visionFaceRecognizer.recognizeFace(pixelBuffer: pixelBufferCopy,
+                                                            orientation: ExifOrientationConvertor.exifOrientationForCurrentDeviceOrientation())
                 }
-                
-                self.visionFaceRecognizer.recognizeFace(pixelBuffer: pixelBufferCopy,
-                                                        orientation: ExifOrientationConvertor.exifOrientationForCurrentDeviceOrientation())
             }
         }
-//
-//            if let sampleBufferCopy = sampleBufferCopy,
-//                let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBufferCopy) {
-//
-//                DispatchQueue.global().async {
-//                    self.visionFaceRecognizer.recognizeFace(pixelBuffer: pixelBuffer,
-//                                                            orientation: self.exifOrientationForCurrentDeviceOrientation())
-//                }
-//            }
-//        }
-        
+
         self.previewView.pixelBuffer = imageBuffer
         CameraManager.sigma += 1
     }

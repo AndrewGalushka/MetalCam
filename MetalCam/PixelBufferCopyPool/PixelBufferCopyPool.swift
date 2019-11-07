@@ -89,7 +89,6 @@ class PixelBufferCopyPool {
             let baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer)
             memcpy(baseAddressCopy, baseAddress, bufferDescription.height * bufferDescription.bytesPerRow)
         }
-        
     }
 }
 

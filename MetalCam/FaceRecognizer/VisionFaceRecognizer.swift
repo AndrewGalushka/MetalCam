@@ -10,7 +10,6 @@ import Vision
 import CoreMedia
 
 @objc class VisionFaceRecognizer: NSObject {
-    
     private var objectDetectionRequests: [VNDetectFaceRectanglesRequest]?
     private var trackingRequests: [VNTrackObjectRequest]?
     private var sequenceRequestHandler: VNSequenceRequestHandler?
