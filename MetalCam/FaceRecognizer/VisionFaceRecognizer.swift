@@ -9,19 +9,19 @@
 import Vision
 import CoreMedia
 
-@objc class VisionFaceRecognizer: NSObject {
+class VisionFaceRecognizer {
     private var objectDetectionRequests: [VNDetectFaceRectanglesRequest]?
     private var trackingRequests: [VNTrackObjectRequest]?
     private var sequenceRequestHandler: VNSequenceRequestHandler?
     private let fpsMeasurer = ManualFPSMeasurer()
     
-    @objc func prepare() {
-        let faceDetectionRequest = VNDetectFaceRectanglesRequest(completionHandler: self.faceRectanglesDetectionCompletionHandler)
+    func prepare() {
+        let faceDetectionRequest = VNDetectFaceRectanglesRequest(completionHandler: self.requestCompletionHandler)
         self.objectDetectionRequests = [faceDetectionRequest]
         self.sequenceRequestHandler = VNSequenceRequestHandler()
     }
     
-    fileprivate func faceRectanglesDetectionCompletionHandler(_ request: VNRequest, _ error: Error?) {
+    private func requestCompletionHandler(_ request: VNRequest, _ error: Error?) {
         if error != nil {
             print("FaceDetection error: \(String(describing: error)).")
         }
