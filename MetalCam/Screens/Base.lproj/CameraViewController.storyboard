@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -21,6 +19,10 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g1E-bp-xMp" customClass="CaptureViewPreviewView" customModule="MetalCam" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Iqr-wA-Cjn" customClass="DetectedFacePreviewView" customModule="MetalCam" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vKU-iQ-HWp">
                                 <rect key="frame" x="365" y="813" width="44" height="44"/>
@@ -42,16 +44,22 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="g1E-bp-xMp" secondAttribute="bottom" id="BwM-aO-DDx"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="vKU-iQ-HWp" secondAttribute="bottom" constant="5" id="C1q-H7-SaQ"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="g1E-bp-xMp" secondAttribute="trailing" id="Ndn-L2-Xl3"/>
+                            <constraint firstItem="Iqr-wA-Cjn" firstAttribute="bottom" secondItem="g1E-bp-xMp" secondAttribute="bottom" id="WYS-AY-1Ag"/>
                             <constraint firstItem="g1E-bp-xMp" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="eNk-pP-sWY"/>
+                            <constraint firstItem="Iqr-wA-Cjn" firstAttribute="trailing" secondItem="g1E-bp-xMp" secondAttribute="trailing" id="l7M-Tm-KFG"/>
+                            <constraint firstItem="Iqr-wA-Cjn" firstAttribute="leading" secondItem="g1E-bp-xMp" secondAttribute="leading" id="mHv-XV-Ihb"/>
+                            <constraint firstItem="Iqr-wA-Cjn" firstAttribute="top" secondItem="g1E-bp-xMp" secondAttribute="top" id="uQ5-GK-qvh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="detectedFacePreview" destination="Iqr-wA-Cjn" id="3Cg-Zg-eG2"/>
                         <outlet property="videoCapturePreview" destination="g1E-bp-xMp" id="Biq-hp-qIt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="139" y="100"/>
         </scene>
     </scenes>
 </document>

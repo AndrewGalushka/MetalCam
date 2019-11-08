@@ -14,12 +14,14 @@ import CoreVideo
 
 class CameraManager: NSObject {
     private let camera: CameraType = Camera()
-    private let visionFaceRecognizer = VisionFaceRecognizer()
+    private lazy var visionFaceRecognizer: VisionFaceRecognizer = VisionFaceRecognizer()
+    
     private let processingQueue: DispatchQueue = DispatchQueue(label: "com.camera.manager.processing.queue")
     private let faceProcessingQueue: DispatchQueue = DispatchQueue(label: "com.camera.manager.face.processing.queue")
     private let pixelBufferCopyPool = PixelBufferCopyPool()
     
     private var preview: AVCaptureVideoPreviewLayer?
+    private var shapeLayer: CAShapeLayer?
     private let previewView: PreviewMetalView = {
         let previewView = PreviewMetalView()
         previewView.rotation = .rotate180Degrees
@@ -45,6 +47,10 @@ class CameraManager: NSObject {
         previewView.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
     }
     
+    func setFaceRecognizerDelegate(_ delegate: VisionFaceRecognizerDelegate?) {
+        self.visionFaceRecognizer.delegate = delegate
+    }
+    
     func start() {
         camera.start()
     }
@@ -68,7 +74,7 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
             return
         }
     
-        if CameraManager.sigma % 2 == 0 {
+        if CameraManager.sigma % 5 == 0 {
             
             if let pixelBufferCopy = self.pixelBufferCopyPool.makeCopy(imageBuffer){
                 faceProcessingQueue.async {
@@ -78,6 +84,7 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
             }
         }
 
+        
         self.previewView.pixelBuffer = imageBuffer
         CameraManager.sigma += 1
     }
@@ -96,5 +103,11 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
         let assetWriterInputAdaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: assetWriterInput, sourcePixelBufferAttributes: nil)
         let assetWriter = try! AVAssetWriter(outputURL: path, fileType: .mov)
         assetWriter.add(assetWriterInput)
+    }
+}
+
+extension CameraManager: VisionFaceRecognizerDelegate {
+    func visionFaceRecognizer(_ visionFaceRecognizer: VisionFaceRecognizer, didFindRectangle: CGRect) {
+        
     }
 }

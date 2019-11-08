@@ -15,6 +15,8 @@ class VisionFaceRecognizer {
     private var sequenceRequestHandler: VNSequenceRequestHandler?
     private let fpsMeasurer = ManualFPSMeasurer()
     
+    var delegate: VisionFaceRecognizerDelegate?
+    
     func prepare() {
         let faceDetectionRequest = VNDetectFaceRectanglesRequest(completionHandler: self.requestCompletionHandler)
         self.objectDetectionRequests = [faceDetectionRequest]
@@ -113,6 +115,10 @@ class VisionFaceRecognizer {
         if newTrackingRequests.isEmpty {
             // Nothing to track, so abort.
             return
+        }
+        
+        if let detectedObservation = trackingRequests.first?.results?.first as? VNDetectedObjectObservation {
+            delegate?.visionFaceRecognizer(self, didFindRectangle: detectedObservation.boundingBox)
         }
     }
     

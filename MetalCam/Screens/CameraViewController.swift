@@ -14,6 +14,7 @@ class CameraViewController: UIViewController {
     
     private let camera: CameraManager = CameraManager()
     @IBOutlet weak var videoCapturePreview: CaptureViewPreviewView!
+    @IBOutlet weak var detectedFacePreview: DetectedFacePreviewView!
     
     // MARK: - Lifecycle
     
@@ -21,6 +22,7 @@ class CameraViewController: UIViewController {
         super.viewDidLoad()
     
         camera.configure()
+        camera.setFaceRecognizerDelegate(detectedFacePreview)
         camera.attachOutput(to: videoCapturePreview)
         camera.start()
     }
