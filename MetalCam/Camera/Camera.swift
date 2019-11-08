@@ -115,15 +115,23 @@ class Camera: CameraType {
                                                                           mediaType: .video,
                                                                           position: AVCaptureDevice.Position.back)
         
-        return backDeviceDiscoverySession.devices.first!
+        guard let backCameraDevice = backDeviceDiscoverySession.devices.first else {
+            fatalError("Couldn't find any back camera device")
+        }
+        
+        return backCameraDevice
     }
     
     private func discoverFrontDevice() -> AVCaptureDevice {
-        let backDeviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInTrueDepthCamera, .builtInDualCamera, .builtInWideAngleCamera],
+        let frontDeviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInTrueDepthCamera, .builtInDualCamera, .builtInWideAngleCamera],
                                                                           mediaType: .video,
                                                                           position: AVCaptureDevice.Position.front)
         
-        return backDeviceDiscoverySession.devices.first!
+        guard let frontCameraDevice = frontDeviceDiscoverySession.devices.first else {
+            fatalError("Couldn't find any front camera device")
+        }
+        
+        return frontCameraDevice
     }
     
     private func discoverMicDevice() -> AVCaptureDevice {
@@ -131,7 +139,11 @@ class Camera: CameraType {
                                                                          mediaType: AVMediaType.audio,
                                                                          position: .unspecified)
 
-        return micDeviceDiscoverySession.devices.first!
+        guard let micDevice = micDeviceDiscoverySession.devices.first else {
+            fatalError("Couldn't find any microphone device")
+        }
+        
+        return micDevice
     }
 }
 
