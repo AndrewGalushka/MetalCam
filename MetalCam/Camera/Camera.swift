@@ -46,18 +46,10 @@ class Camera: CameraType {
         captureSession.addInput(self.deviceInput)
         
         // Initialize CaptureOutput
-        self.captureSessionOutput = AVCaptureVideoDataOutput()
-        self.captureSessionOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
+        self.configureCaptureOutput()
         
         // Add output to CaptureSession
         captureSession.addOutput(captureSessionOutput)
-        
-        captureSessionOutput.connection(with: .video)?.isEnabled = true
-        if let connection = captureSessionOutput.connection(with: .video) {
-            if connection.isCameraIntrinsicMatrixDeliverySupported {
-                connection.isCameraIntrinsicMatrixDeliveryEnabled = true
-            }
-        }
         
         // Save internal state
         self.currentCamDevice = self.frontDevice
@@ -144,6 +136,20 @@ class Camera: CameraType {
         }
         
         return micDevice
+    }
+}
+
+private extension Camera {
+    func configureCaptureOutput() {
+        self.captureSessionOutput = AVCaptureVideoDataOutput()
+        self.captureSessionOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
+        
+        captureSessionOutput.connection(with: .video)?.isEnabled = true
+        if let connection = captureSessionOutput.connection(with: .video) {
+            if connection.isCameraIntrinsicMatrixDeliverySupported {
+                connection.isCameraIntrinsicMatrixDeliveryEnabled = true
+            }
+        }
     }
 }
 
