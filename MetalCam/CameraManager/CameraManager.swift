@@ -24,12 +24,17 @@ class CameraManager: NSObject {
     private var shapeLayer: CAShapeLayer?
     private let previewView: PreviewMetalView = {
         let previewView = PreviewMetalView()
-        previewView.rotation = .rotate180Degrees
+//        previewView.rotation = .rotate180Degrees
         previewView.mirroring = true
         return previewView
     }()
-    
+        
     private let fpsMeasurer = ManualFPSMeasurer()
+    
+    override init() {
+        super.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChangedHander(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
     
     func configure() {
         self.visionFaceRecognizer.prepare()
@@ -61,6 +66,27 @@ class CameraManager: NSObject {
     
     func switchCamPosition() {
         camera.switchCamPosition()
+    }
+    
+    @objc private func orientationDidChangedHander(_ notification: NSNotification) {
+        switch UIDevice.current.orientation {
+        case .unknown:
+            return
+        case .portrait:
+            self.previewView.rotation = .rotate90Degrees
+        case .portraitUpsideDown:
+            self.previewView.rotation = .rotate270Degrees
+        case .landscapeLeft:
+            self.previewView.rotation = .rotate180Degrees
+        case .landscapeRight:
+            self.previewView.rotation = .rotate0Degrees
+        case .faceUp:
+            self.previewView.rotation = .rotate180Degrees
+        case .faceDown:
+            self.previewView.rotation = .rotate270Degrees
+        @unknown default:
+            return
+        }
     }
 }
 
