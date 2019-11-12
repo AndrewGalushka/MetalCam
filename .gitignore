@@ -71,5 +71,5 @@ fastlane/test_output
 # Other
 IDEWorkspaceChecks.plist
 
-*.xcodeproj/*
+#*.xcodeproj/*
 !*.xcworkspace/contents.xcworkspacedata

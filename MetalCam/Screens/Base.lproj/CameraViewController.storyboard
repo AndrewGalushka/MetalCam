@@ -24,31 +24,44 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vKU-iQ-HWp">
-                                <rect key="frame" x="362" y="810" width="44" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="44" id="dlL-y8-jF1"/>
-                                    <constraint firstAttribute="height" constant="44" id="t0E-f5-4jb"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="26"/>
-                                <state key="normal" title="R"/>
-                                <connections>
-                                    <action selector="switchCameraButtonTouchUpInsideActionHandler:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FdR-QI-icu"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="ZAz-k8-XRs">
+                                <rect key="frame" x="362" y="394" width="44" height="118"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vKU-iQ-HWp">
+                                        <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="44" id="dlL-y8-jF1"/>
+                                            <constraint firstAttribute="height" constant="44" id="t0E-f5-4jb"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="26"/>
+                                        <state key="normal" title="R"/>
+                                        <connections>
+                                            <action selector="switchCameraButtonTouchUpInsideActionHandler:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FdR-QI-icu"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hRC-qe-v64">
+                                        <rect key="frame" x="0.0" y="74" width="44" height="44"/>
+                                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="26"/>
+                                        <state key="normal" title="RC"/>
+                                        <connections>
+                                            <action selector="recordButtonTouchUpInsideActionHandler:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kWU-A6-Zkw"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="vKU-iQ-HWp" secondAttribute="trailing" constant="8" id="2oe-Z4-JQ4"/>
                             <constraint firstItem="g1E-bp-xMp" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="AnT-QD-871"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="g1E-bp-xMp" secondAttribute="bottom" id="BwM-aO-DDx"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="vKU-iQ-HWp" secondAttribute="bottom" constant="8" id="C1q-H7-SaQ"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="g1E-bp-xMp" secondAttribute="trailing" id="Ndn-L2-Xl3"/>
                             <constraint firstItem="Iqr-wA-Cjn" firstAttribute="bottom" secondItem="g1E-bp-xMp" secondAttribute="bottom" id="WYS-AY-1Ag"/>
                             <constraint firstItem="g1E-bp-xMp" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="eNk-pP-sWY"/>
                             <constraint firstItem="Iqr-wA-Cjn" firstAttribute="trailing" secondItem="g1E-bp-xMp" secondAttribute="trailing" id="l7M-Tm-KFG"/>
                             <constraint firstItem="Iqr-wA-Cjn" firstAttribute="leading" secondItem="g1E-bp-xMp" secondAttribute="leading" id="mHv-XV-Ihb"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ZAz-k8-XRs" secondAttribute="trailing" constant="8" id="qp8-MA-5AZ"/>
                             <constraint firstItem="Iqr-wA-Cjn" firstAttribute="top" secondItem="g1E-bp-xMp" secondAttribute="top" id="uQ5-GK-qvh"/>
+                            <constraint firstItem="ZAz-k8-XRs" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="yG0-BT-Z9c"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -59,7 +72,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="139" y="100"/>
+            <point key="canvasLocation" x="137.68115942028987" y="99.776785714285708"/>
         </scene>
     </scenes>
 </document>

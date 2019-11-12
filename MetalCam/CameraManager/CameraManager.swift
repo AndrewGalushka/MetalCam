@@ -24,11 +24,11 @@ class CameraManager: NSObject {
     private var shapeLayer: CAShapeLayer?
     private let previewView: PreviewMetalView = {
         let previewView = PreviewMetalView()
-//        previewView.rotation = .rotate180Degrees
         previewView.mirroring = true
         return previewView
     }()
         
+    private let videoWriter: VideoWritable = VideoWriter()
     private let fpsMeasurer = ManualFPSMeasurer()
     
     override init() {
@@ -66,6 +66,20 @@ class CameraManager: NSObject {
     
     func switchCamPosition() {
         camera.switchCamPosition()
+    }
+    
+    func startRecording() {
+        
+        do {
+            try self.videoWriter.startRecording(url: FilePathGenerator.generatePath())
+        } catch let error {
+        }
+    }
+    
+    func finishRecording(completion: @escaping (URL) -> Void) {
+        self.videoWriter.finish { (url) in
+            completion(url)
+        }
     }
     
     @objc private func orientationDidChangedHander(_ notification: NSNotification) {
@@ -110,8 +124,21 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
             }
         }
 
+        if videoWriter.isRecording {
+            self.videoWriter.update(sampleBuffer: sampleBuffer)
+        }
         
         self.previewView.pixelBuffer = imageBuffer
         CameraManager.sigma += 1
     }
 }
+
+extension CameraManager {
+    fileprivate enum FilePathGenerator {
+        static func generatePath() -> URL {
+            let pathToTempDirectory = URL(fileURLWithPath: NSTemporaryDirectory())
+            return pathToTempDirectory.appendingPathComponent(UUID().uuidString, isDirectory: false)
+        }
+    }
+}
+ 

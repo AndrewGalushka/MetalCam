@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 class CameraViewController: UIViewController {
 
@@ -33,6 +34,28 @@ class CameraViewController: UIViewController {
     
     @IBAction func switchCameraButtonTouchUpInsideActionHandler(_ sender: Any) {
         self.camera.switchCamPosition()
+    }
+    
+    var flag = false
+    
+    @IBAction func recordButtonTouchUpInsideActionHandler(_ button: UIButton) {
+        
+        if flag {
+            button.setTitleColor(.blue, for: .normal)
+            camera.finishRecording(completion: { url in
+                
+                PHPhotoLibrary.shared().performChanges({
+                    PHAssetCreationRequest().addResource(with: .video, fileURL: url, options: nil)
+                }) { (success, error) in
+                    
+                }
+            })
+        } else {
+            camera.startRecording()
+            button.setTitleColor(.red, for: .normal)
+        }
+        
+        flag.toggle()
     }
 }
 
