@@ -9,8 +9,9 @@
 import AVFoundation
 
 protocol RecordingManagerType {
+    var isRecording: Bool { get }
     func startRecording(url: URL) throws
-    func update(imageBuffer: CMSampleBuffer)
-    func finish()
+    func update(sampleBuffer: CMSampleBuffer)
+    func finish(completion: @escaping (URL) -> Void)
 }
 
