@@ -25,7 +25,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vKU-iQ-HWp">
-                                <rect key="frame" x="365" y="813" width="44" height="44"/>
+                                <rect key="frame" x="362" y="810" width="44" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="44" id="dlL-y8-jF1"/>
                                     <constraint firstAttribute="height" constant="44" id="t0E-f5-4jb"/>
@@ -39,10 +39,10 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="vKU-iQ-HWp" secondAttribute="trailing" constant="5" id="2oe-Z4-JQ4"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="vKU-iQ-HWp" secondAttribute="trailing" constant="8" id="2oe-Z4-JQ4"/>
                             <constraint firstItem="g1E-bp-xMp" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="AnT-QD-871"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="g1E-bp-xMp" secondAttribute="bottom" id="BwM-aO-DDx"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="vKU-iQ-HWp" secondAttribute="bottom" constant="5" id="C1q-H7-SaQ"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="vKU-iQ-HWp" secondAttribute="bottom" constant="8" id="C1q-H7-SaQ"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="g1E-bp-xMp" secondAttribute="trailing" id="Ndn-L2-Xl3"/>
                             <constraint firstItem="Iqr-wA-Cjn" firstAttribute="bottom" secondItem="g1E-bp-xMp" secondAttribute="bottom" id="WYS-AY-1Ag"/>
                             <constraint firstItem="g1E-bp-xMp" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="eNk-pP-sWY"/>
