@@ -88,26 +88,4 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
         self.previewView.pixelBuffer = imageBuffer
         CameraManager.sigma += 1
     }
-    
-    func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-    }
-    
-    private func handleOutputImageBuffer(_ imageBuffer: CVImageBuffer) {
-        
-    }
-    
-    private func record() {
-        let path = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("recoreded_video")
-        
-        let assetWriterInput = AVAssetWriterInput(mediaType: .video, outputSettings: nil)
-        let assetWriterInputAdaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: assetWriterInput, sourcePixelBufferAttributes: nil)
-        let assetWriter = try! AVAssetWriter(outputURL: path, fileType: .mov)
-        assetWriter.add(assetWriterInput)
-    }
-}
-
-extension CameraManager: VisionFaceRecognizerDelegate {
-    func visionFaceRecognizer(_ visionFaceRecognizer: VisionFaceRecognizer, didFindRectangle: CGRect) {
-        
-    }
 }
