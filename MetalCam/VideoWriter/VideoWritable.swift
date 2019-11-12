@@ -1,5 +1,5 @@
 //
-//  RecordingManagerType.swift
+//  VideoWritable.swift
 //  MetalCam
 //
 //  Created by Galushka on 6/3/19.
@@ -8,7 +8,7 @@
 
 import AVFoundation
 
-protocol RecordingManagerType {
+protocol VideoWritable {
     var isRecording: Bool { get }
     func startRecording(url: URL) throws
     func update(sampleBuffer: CMSampleBuffer)

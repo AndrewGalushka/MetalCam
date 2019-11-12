@@ -8,7 +8,7 @@
 
 import AVFoundation
 
-class RecordingManager: RecordingManagerType {
+class VideoWriter: VideoWritable {
     private var assetWriter: AVAssetWriter?
     private var assetWriterInput: AVAssetWriterInput?
     private var assetWriterInputAdapter: AVAssetWriterInputPixelBufferAdaptor?
@@ -81,13 +81,13 @@ class RecordingManager: RecordingManagerType {
     }
 }
 
-private extension RecordingManager {
+private extension VideoWriter {
     enum State: Equatable {
         case inactive
         case recording(AVAssetWriterInputPixelBufferAdaptor, AVAssetWriter)
     }
 }
 
-private extension RecordingManager {
+private extension VideoWriter {
     
 }
