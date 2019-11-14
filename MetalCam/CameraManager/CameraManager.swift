@@ -73,6 +73,7 @@ class CameraManager: NSObject {
         do {
             try self.videoWriter.startRecording(url: FilePathGenerator.generatePath())
         } catch let error {
+            assert(false, error.localizedDescription)
         }
     }
     
@@ -109,7 +110,6 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
     static var sigma = 0
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        fpsMeasurer.measureSubInterval()
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return
         }
@@ -137,7 +137,7 @@ extension CameraManager {
     fileprivate enum FilePathGenerator {
         static func generatePath() -> URL {
             let pathToTempDirectory = URL(fileURLWithPath: NSTemporaryDirectory())
-            return pathToTempDirectory.appendingPathComponent(UUID().uuidString, isDirectory: false)
+            return pathToTempDirectory.appendingPathComponent(UUID().uuidString, isDirectory: false).appendingPathExtension("mov")
         }
     }
 }
