@@ -9,19 +9,28 @@
 import CoreVideo
 
 class PixelBufferCopyPool {
-    
     private var pool: CVPixelBufferPool?
-    
-    func makeCopy(_ pixelBuffer: CVPixelBuffer) -> CVPixelBuffer? {
+        
+    func makeCopy(_ pixelBuffer: CVPixelBuffer) -> CVPixelBuffer?  {
         let bufferDescription = PixelBufferDescription(pixelBuffer: pixelBuffer)
         
         if pool == nil {
             createPool(bufferDescription)
         }
         
+        guard let pool = self.pool else {
+            assert(false, "Couldn't create a pool")
+            return nil
+        }
+        
+        return self.makeCopy(pixelBuffer, using: pool)
+    }
+    
+    func makeCopy(_ pixelBuffer: CVPixelBuffer, using pixelBufferPool: CVPixelBufferPool) -> CVPixelBuffer? {
+        let bufferDescription = PixelBufferDescription(pixelBuffer: pixelBuffer)
+        
         guard
-            let pool = self.pool,
-            let pixelBufferCopy = createPixelBuffer(using: pool, description: bufferDescription)
+            let pixelBufferCopy = createPixelBuffer(using: pixelBufferPool, description: bufferDescription)
         else {
             return nil
         }
