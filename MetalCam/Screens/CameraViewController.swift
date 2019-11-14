@@ -45,7 +45,7 @@ class CameraViewController: UIViewController {
             camera.finishRecording(completion: { url in
                 
                 PHPhotoLibrary.shared().performChanges({
-                    PHAssetCreationRequest().addResource(with: .video, fileURL: url, options: nil)
+                    PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
                 }) { (success, error) in
                     
                 }
