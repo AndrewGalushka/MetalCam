@@ -36,26 +36,36 @@ class CameraViewController: UIViewController {
         self.camera.switchCamPosition()
     }
     
-    var flag = false
+    var isVideoRecording = false
     
     @IBAction func recordButtonTouchUpInsideActionHandler(_ button: UIButton) {
         
-        if flag {
-            button.setTitleColor(.blue, for: .normal)
-            camera.finishRecording(completion: { url in
-                
-                PHPhotoLibrary.shared().performChanges({
-                    PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
-                }) { (success, error) in
-                    
+        if isVideoRecording {
+            camera.finishRecording {
+                switch $0 {
+                case .success(let url):
+                    self.saveVideoToLibrary(url: url)
+                case .failure(let error):
+                    print("recording is unsuccessful: \(error.localizedDescription)")
                 }
-            })
+            }
         } else {
             camera.startRecording()
-            button.setTitleColor(.red, for: .normal)
         }
         
-        flag.toggle()
+        button.setTitleColor(isVideoRecording ? .blue : .red, for: .normal)
+        isVideoRecording.toggle()
+    }
+    
+    private func saveVideoToLibrary(url: URL) {
+        PHPhotoLibrary.shared().performChanges({
+            PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
+        }) { (success, error) in
+            
+            if !success, let error = error {
+                print("Creating video in Photos is unsuccessful: \(error.localizedDescription)")
+            }
+        }
     }
 }
 

@@ -71,16 +71,15 @@ class CameraManager: NSObject {
     func startRecording() {
         
         do {
-            try self.videoWriter.startRecording(url: FilePathGenerator.generatePath())
+            let url = FilePathGenerator.generatePath()
+            try self.videoWriter.startRecording(url: url, frameDimensions: CGSize(width: 1280, height: 720))
         } catch let error {
             assert(false, error.localizedDescription)
         }
     }
     
-    func finishRecording(completion: @escaping (URL) -> Void) {
-        self.videoWriter.finish { (url) in
-            completion(url)
-        }
+    func finishRecording(completion: @escaping (Swift.Result<URL, Error>) -> Void) {
+        self.videoWriter.finish(completion: completion)
     }
     
     @objc private func orientationDidChangedHander(_ notification: NSNotification) {

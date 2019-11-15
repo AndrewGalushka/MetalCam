@@ -10,8 +10,8 @@ import AVFoundation
 
 protocol VideoWritable {
     var isRecording: Bool { get }
-    func startRecording(url: URL) throws
+    func startRecording(url: URL, frameDimensions: CGSize) throws
     func update(sampleBuffer: CMSampleBuffer)
-    func finish(completion: @escaping (URL) -> Void)
+    func finish(completion: @escaping (Swift.Result<URL, Error>) -> Void)
 }
 
