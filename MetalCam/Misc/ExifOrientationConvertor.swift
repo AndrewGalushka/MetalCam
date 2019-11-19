@@ -11,17 +11,13 @@ import CoreGraphics
 
 class ExifOrientationConvertor {
     static func exifOrientationForDeviceOrientation(_ deviceOrientation: UIDeviceOrientation) -> CGImagePropertyOrientation {
-        
         switch deviceOrientation {
         case .portraitUpsideDown:
             return .rightMirrored
-            
         case .landscapeLeft:
             return .downMirrored
-            
         case .landscapeRight:
             return .upMirrored
-            
         default:
             return .leftMirrored
         }
