@@ -86,7 +86,7 @@ class VideoWriter: VideoWritable {
                 }
                 
                 adapter.assetWriterInput.markAsFinished()
-                assetWriter.finishWriting { [weak self] in
+                assetWriter.finishWriting {
                     completion(.success(assetWriter.outputURL))
                 }
                 self.reset()
@@ -133,7 +133,7 @@ private extension VideoWriter {
 
 @propertyWrapper
 class Atomic<Value> {
-    private let queue = DispatchQueue(label: "com.vadimbulavin.atomic")
+    private let queue = DispatchQueue(label: "com.atomic.property")
     private var value: Value
 
     init(wrappedValue: Value) {
@@ -150,14 +150,8 @@ class Atomic<Value> {
     }
     
     func mutate(_ mutation: (inout Value) -> Void) {
-        queue.sync {
+        return queue.sync {
             mutation(&value)
-        }
-    }
-    
-    static func +=(lhs: Atomic<Value>, rhs: Value) -> Atomic<Value> {
-        lhs.mutate {
-            $0 = $0 + rhs
         }
     }
 }
