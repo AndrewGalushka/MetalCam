@@ -24,7 +24,9 @@ class FaceRecognitionDecorator {
             return
         }
         
-        faceRecognizer.recognizeFace(pixelBuffer: pixelBuffer, orientation: orientation)
+        if let pixelBufferCopy = pixelBufferCopyPool.makeCopy(pixelBuffer) {
+            faceRecognizer.recognizeFace(pixelBuffer: pixelBufferCopy, orientation: orientation)
+        }
     }
     
     private func canProcessNextFrame() -> Bool {
@@ -34,7 +36,7 @@ class FaceRecognitionDecorator {
         case .everyNFrame(let framesDropThreshold):
             
             if framesDropped % framesDropThreshold == 0 {
-                framesDropped = 0
+                framesDropped = 1
                 return true
             } else {
                 framesDropped += 1
