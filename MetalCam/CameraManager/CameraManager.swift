@@ -114,7 +114,12 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
             return
         }
     
-        faceRecognitionDecorator.recognizeFace(pixelBuffer: imageBuffer, orientation: ExifOrientationConvertor.exifOrientationForCurrentDeviceOrientation())
+        faceProcessingQueue.async { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.faceRecognitionDecorator.recognizeFace(pixelBuffer: imageBuffer,
+            orientation: ExifOrientationConvertor.exifOrientationForCurrentDeviceOrientation())
+        }
+        
         
         if videoWriter.isRecording {
             self.videoWriter.update(sampleBuffer: sampleBuffer)
