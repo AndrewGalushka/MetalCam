@@ -20,6 +20,7 @@
 		8D5B0663229820F300BC25CD /* UIViewController+Storyboard .swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5B0662229820F300BC25CD /* UIViewController+Storyboard .swift */; };
 		8D5B066622982BBC00BC25CD /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5B066522982BBC00BC25CD /* Camera.swift */; };
 		8D5B06682298444B00BC25CD /* CaptureViewPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5B06672298444B00BC25CD /* CaptureViewPreviewView.swift */; };
+		8D82786B2386EDC900E8AFD1 /* FaceRecognitionDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D82786A2386EDC900E8AFD1 /* FaceRecognitionDecorator.swift */; };
 		8DA194E8237AB7AB0094082A /* ApplicationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA194E7237AB7AB0094082A /* ApplicationRouter.swift */; };
 		8DA194EA237AB8AB0094082A /* ApplicationRoutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA194E9237AB8AB0094082A /* ApplicationRoutable.swift */; };
 		8DA194EC237AB90C0094082A /* ApplicationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA194EB237AB90C0094082A /* ApplicationFactory.swift */; };
@@ -50,6 +51,7 @@
 		8D5B0662229820F300BC25CD /* UIViewController+Storyboard .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Storyboard .swift"; sourceTree = "<group>"; };
 		8D5B066522982BBC00BC25CD /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		8D5B06672298444B00BC25CD /* CaptureViewPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureViewPreviewView.swift; sourceTree = "<group>"; };
+		8D82786A2386EDC900E8AFD1 /* FaceRecognitionDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceRecognitionDecorator.swift; sourceTree = "<group>"; };
 		8DA194E7237AB7AB0094082A /* ApplicationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationRouter.swift; sourceTree = "<group>"; };
 		8DA194E9237AB8AB0094082A /* ApplicationRoutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationRoutable.swift; sourceTree = "<group>"; };
 		8DA194EB237AB90C0094082A /* ApplicationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationFactory.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 		8D4E8B3F237184DE009AB626 /* FaceRecognizer */ = {
 			isa = PBXGroup;
 			children = (
+				8D8278692386EDAD00E8AFD1 /* FaceRecognitionController */,
 				8D13B48C237020C3003CE901 /* VisionFaceRecognizer.swift */,
 				8DB85F732375C661005902C1 /* VisionFaceRecognizerDelegate.swift */,
 			);
@@ -174,6 +177,14 @@
 				8D4F03D6229BCB88008F52F8 /* CameraType.swift */,
 			);
 			path = Camera;
+			sourceTree = "<group>";
+		};
+		8D8278692386EDAD00E8AFD1 /* FaceRecognitionController */ = {
+			isa = PBXGroup;
+			children = (
+				8D82786A2386EDC900E8AFD1 /* FaceRecognitionDecorator.swift */,
+			);
+			path = FaceRecognitionController;
 			sourceTree = "<group>";
 		};
 		8DCDAC04229BF4FE001CF3DB /* CameraManager */ = {
@@ -325,6 +336,7 @@
 				8DD64F25237171EA00D887CC /* PassThrough.metal in Sources */,
 				8DCDAC09229C2118001CF3DB /* MetalSharedDevice.swift in Sources */,
 				8D5B064D22981F6D00BC25CD /* CameraViewController.swift in Sources */,
+				8D82786B2386EDC900E8AFD1 /* FaceRecognitionDecorator.swift in Sources */,
 				8D13B48F237020CA003CE901 /* ManualFPSMeasurer.swift in Sources */,
 				8DA194E8237AB7AB0094082A /* ApplicationRouter.swift in Sources */,
 				8D5B064B22981F6D00BC25CD /* AppDelegate.swift in Sources */,

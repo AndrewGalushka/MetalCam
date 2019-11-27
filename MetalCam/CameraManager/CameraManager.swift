@@ -15,10 +15,11 @@ import CoreVideo
 class CameraManager: NSObject {
     private let camera: CameraType = Camera()
     private lazy var visionFaceRecognizer: VisionFaceRecognizer = VisionFaceRecognizer()
+    private lazy var faceRecognitionDecorator = FaceRecognitionDecorator(faceRecognizer: visionFaceRecognizer,
+                                                                         recognitionFrequency: .everyNFrame(5))
     
     private let processingQueue: DispatchQueue = DispatchQueue(label: "com.camera.manager.processing.queue")
     private let faceProcessingQueue: DispatchQueue = DispatchQueue(label: "com.camera.manager.face.processing.queue")
-    private let pixelBufferCopyPool = PixelBufferCopyPool()
     
     private var preview: AVCaptureVideoPreviewLayer?
     private var shapeLayer: CAShapeLayer?
@@ -113,16 +114,8 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
             return
         }
     
-        if CameraManager.sigma % 5 == 0 {
-            
-            if let pixelBufferCopy = self.pixelBufferCopyPool.makeCopy(imageBuffer){
-                faceProcessingQueue.async {
-                    self.visionFaceRecognizer.recognizeFace(pixelBuffer: pixelBufferCopy,
-                                                            orientation: ExifOrientationConvertor.exifOrientationForCurrentDeviceOrientation())
-                }
-            }
-        }
-
+        faceRecognitionDecorator.recognizeFace(pixelBuffer: imageBuffer, orientation: ExifOrientationConvertor.exifOrientationForCurrentDeviceOrientation())
+        
         if videoWriter.isRecording {
             self.videoWriter.update(sampleBuffer: sampleBuffer)
         }
